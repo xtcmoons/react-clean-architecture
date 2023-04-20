@@ -1,6 +1,6 @@
-import { Detail } from "../../model/Detail";
-import { DetailNetworkDataSource } from "../../network/DataSource/DetailNetworkDataSource";
-import { DetailRepository } from "./DetailRepository";
+import { Detail } from "../../../model/Detail";
+import { DetailNetworkDataSource } from "../../DataSource/DetailNetworkDataSource";
+import { DetailRepository } from "../DetailRepository";
 
 export class DetailRepositoryImpl implements DetailRepository {
   detailNetworkDataSource: DetailNetworkDataSource;

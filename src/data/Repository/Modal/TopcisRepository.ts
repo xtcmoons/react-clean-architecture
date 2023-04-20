@@ -1,12 +1,11 @@
 
-export type DomainAuthor = {
+export type RepositoryAuthor = {
   loginname: string
   avatarUrl: string
 }
 
-export type DomainTopics = {
+export type RepositoryTopics = {
   id: string
-  authorId: string
   tab: string
   title: string
   good: boolean
@@ -14,5 +13,5 @@ export type DomainTopics = {
   replyCount: number
   visitCount: number
   createAt: string
-  author: DomainAuthor 
+  author: RepositoryAuthor 
 }

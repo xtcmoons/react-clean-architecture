@@ -1,5 +1,5 @@
-import { NetworkDetail } from "../../Model/Detail";
-import request from "../../Request/request";
+import { NetworkDetail } from "../Model/Detail";
+import request from "../../../network/Request/request";
 import { DetailNetworkDataSource } from "../DetailNetworkDataSource";
 
 export class DetailNetworkDataSourceImpl implements DetailNetworkDataSource {

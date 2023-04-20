@@ -1,42 +1,40 @@
 import { useEffect, useRef, useState } from "react";
-import { Topics } from "../../../model/Topcis";
 import { HomeRepository } from "../../../data/Repository/HomeRepository";
-import { Immer } from "immer";
+import { produce } from "immer";
+import { HomeUiState } from "../interface";
+import { RepositoryTopics } from "../../../data/Repository/Modal/TopcisRepository";
 
 export function useHome(
-  homeRepository: HomeRepository
-): [list: Topics[], hasMore: boolean, loadMore: () => Promise<void>] {
-  const [list, setList] = useState<Topics[]>([]);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  homeUseCase: HomeRepository
+): [list: RepositoryTopics[], hasMore: boolean, loadMore: () => Promise<void>] {
 
-  const pageRef = useRef(1);
+  const [homeUiState, setHomeUiState] = useState<HomeUiState>({
+    topics: [],
+    hasMore: true,
+  })
 
-  useEffect(() => {
-    const init = async () => {
-      const { data } = await homeRepository.getList(pageRef.current, "all", 20);
-      debugger
-      setList(data);
-      if (data.length < 20) {
-        setHasMore(false);
-      } else {
-        setHasMore(true);
-      }
-    };
-    init();
-  }, []);
+  const pageRef = useRef(0);
 
   const loadMore = async () => {
     pageRef.current = pageRef.current + 1;
-    const { data } = await homeRepository.getList(pageRef.current, "all", 20);
+    const list = await homeUseCase.getList(pageRef.current, "all", 20);
     debugger
-    setList(preState => preState.concat(data))
-    debugger
-    if (data.length < 20) {
-      setHasMore(false);
-    } else {
-      setHasMore(true);
-    }
+
+    setHomeUiState(
+      produce((draft) => {
+        draft.topics = draft.topics.concat(list);
+        if (list.length < 20) {
+          draft.hasMore = false;
+        } else {
+          draft.hasMore = true;
+        }
+      }))
   };
 
-  return [list, hasMore, loadMore];
+  return [
+    homeUiState.topics,
+    homeUiState.hasMore,
+    loadMore
+  ]
+
 }

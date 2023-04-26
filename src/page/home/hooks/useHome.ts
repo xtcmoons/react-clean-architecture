@@ -1,24 +1,24 @@
 import { useEffect, useRef, useState } from "react";
-import { HomeRepository } from "../../../data/Repository/HomeRepository";
 import { produce } from "immer";
 import { HomeUiState } from "../interface";
 import { RepositoryTopics } from "../../../data/Repository/Modal/TopcisRepository";
+import { getListUseCase } from "../../../domain/UseCase/HomeUseCase/HomeUseCase";
 
-export function useHome(
-  homeUseCase: HomeRepository
-): [list: RepositoryTopics[], hasMore: boolean, loadMore: () => Promise<void>] {
-
+export function useHome(): [
+  list: RepositoryTopics[],
+  hasMore: boolean,
+  loadMore: () => Promise<void>
+] {
   const [homeUiState, setHomeUiState] = useState<HomeUiState>({
     topics: [],
     hasMore: true,
-  })
+  });
 
   const pageRef = useRef(0);
 
   const loadMore = async () => {
     pageRef.current = pageRef.current + 1;
-    const list = await homeUseCase.getList(pageRef.current, "all", 20);
-    debugger
+    const list = await getListUseCase(pageRef.current, "all", 20);
 
     setHomeUiState(
       produce((draft) => {
@@ -28,13 +28,9 @@ export function useHome(
         } else {
           draft.hasMore = true;
         }
-      }))
+      })
+    );
   };
 
-  return [
-    homeUiState.topics,
-    homeUiState.hasMore,
-    loadMore
-  ]
-
+  return [homeUiState.topics, homeUiState.hasMore, loadMore];
 }

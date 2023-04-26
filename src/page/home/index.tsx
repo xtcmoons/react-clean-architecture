@@ -1,16 +1,11 @@
-import { HomeRepositoryImpl } from "../../data/Repository/Impl/HomeRepositoryImpl";
-import { HomeNetworkDataSourceImpl } from "../../data/DataSource/Home/HomeNetworkDataSourceImpl";
 import { useHome } from "./hooks/useHome";
 import { InfiniteScroll, List } from "antd-mobile";
 import Cell from "./Cell";
-import { HomeUseCase } from "../../domain/UseCase/HomeUseCase/HomeUseCase";
-
-const homeDataSource = new HomeNetworkDataSourceImpl() 
-const homeRepository = new HomeRepositoryImpl(homeDataSource);
-const homeUseCase = new HomeUseCase(homeRepository);
 
 function Home() {
-  const [list, hasMore, loadMore] = useHome(homeUseCase);
+
+  const [list, hasMore, loadMore] = useHome();
+
   return (
     <>
       <List>
